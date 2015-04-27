@@ -9,7 +9,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -49,7 +48,6 @@ public class Main extends Application {
         field.getChildren().add(tile);
         
         final Button first = new Button("1");
-        //final Label first = new Label("1");
         first.setMinHeight(30);
         first.setMinWidth(30);
         first.setLayoutX(0);
