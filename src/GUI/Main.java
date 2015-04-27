@@ -48,8 +48,8 @@ public class Main extends Application {
         tile.setLayoutY(0);
         field.getChildren().add(tile);
         
-        //final Button first = new Button("1");
-        final Label first = new Label("1");
+        final Button first = new Button("1");
+        //final Label first = new Label("1");
         first.setMinHeight(30);
         first.setMinWidth(30);
         first.setLayoutX(0);
