@@ -7,15 +7,14 @@ public class Tile extends Button{
     private int number;
     private int dx;
     private int dy;
-    private int x;
-    private int y;
-    private Tile covered;
+    private Tile cover;
+    private int tileSize;
 
-    public Tile(int x, int y, int number) {
+    public Tile(int x, int y, int number, int tileSize) {
+        this.tileSize = tileSize;
         setX(x);
         setY(y);
-        setMinHeight(50);
-        setMinWidth(50);
+        setPrefSize(tileSize - 1, tileSize - 1);
         setNumber(number);
     }
 
@@ -80,36 +79,40 @@ public class Tile extends Button{
     }
 
     public int getX() {
-        return x;
+        return (int) (getLayoutX() / tileSize + 1);
     }
 
     public void setX(int x) {
-        setLayoutX((x - 1) * 50);
-        this.x = x;
+        setLayoutX((x - 1) * tileSize);
     }
 
     public int getY() {
-        return y;
+        return (int) (getLayoutY() / tileSize + 1);
     }
 
     public void setY(int y) {
-        setLayoutY((y - 1) * 50);
-        this.y = y;
+        setLayoutY((y - 1) * tileSize);
     }
 
-    public Tile getCovered() {
-        return covered;
+    public Tile getCover() {
+        return cover;
     }
 
-    public void setCovered(Tile covered) {
-        this.covered = covered;
+    public void setCover(Tile cover) {
+        this.cover = cover;
     }
 
     public void normalizeCoordinates() {
         setLayoutX(getLayoutX() + translateXProperty().getValue());
         translateXProperty().setValue(0);
+        this.dx = 0;
         setLayoutY(getLayoutY() + translateYProperty().getValue());
         translateYProperty().setValue(0);
+        this.dy = 0;
+    }
+
+    public int getTileSize() {
+        return tileSize;
     }
 }
 
