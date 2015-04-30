@@ -11,11 +11,10 @@ import java.util.*;
 
 public class Movement {
     private static Timeline timeline = new Timeline();
-    private static final int MOVETIME = 100;
 
-    public static void moveRight(Field field) {
-        List<Tile> tiles = field.getTiles();
-        int size = field.getSize();
+    public static void moveRight(GamePane gamePane) {
+        List<Tile> tiles = gamePane.getTiles();
+        int size = gamePane.getSize();
         Collections.sort(tiles, new Comparator<Tile>() {
             @Override
             public int compare(Tile o1, Tile o2) {
@@ -53,11 +52,11 @@ public class Movement {
                 }
             }
         }
-        animate(field, true);
+        animate(gamePane, true);
     }
 
-    public static void moveLeft(Field field) {
-        List<Tile> tiles = field.getTiles();
+    public static void moveLeft(GamePane gamePane) {
+        List<Tile> tiles = gamePane.getTiles();
         Collections.sort(tiles, new Comparator<Tile>() {
             @Override
             public int compare(Tile o1, Tile o2) {
@@ -95,12 +94,12 @@ public class Movement {
                 }
             }
         }
-        animate(field, true);
+        animate(gamePane, true);
     }
 
-    public static void moveDown(Field field) {
-        List<Tile> tiles = field.getTiles();
-        int size = field.getSize();
+    public static void moveDown(GamePane gamePane) {
+        List<Tile> tiles = gamePane.getTiles();
+        int size = gamePane.getSize();
         Collections.sort(tiles, new Comparator<Tile>() {
             @Override
             public int compare(Tile o1, Tile o2) {
@@ -138,11 +137,11 @@ public class Movement {
                 }
             }
         }
-        animate(field, false);
+        animate(gamePane, false);
     }
 
-    public static void moveUp(Field field) {
-        List<Tile> tiles = field.getTiles();
+    public static void moveUp(GamePane gamePane) {
+        List<Tile> tiles = gamePane.getTiles();
         Collections.sort(tiles, new Comparator<Tile>() {
             @Override
             public int compare(Tile o1, Tile o2) {
@@ -180,30 +179,30 @@ public class Movement {
                 }
             }
         }
-        animate(field, false);
+        animate(gamePane, false);
     }
 
-    private static void animate(final Field field, boolean x) {
+    private static void animate(final GamePane gamePane, boolean x) {
         timeline.getKeyFrames().clear();
         boolean hasMoves = false;
-        for (final Tile tile : field.getTiles()) {
+        for (final Tile tile : gamePane.getTiles()) {
             int move = x ? tile.getDx() : tile.getDy();
             if (move != 0) {
                 hasMoves = true;
-                KeyValue kv = new KeyValue(x ? tile.translateXProperty() : tile.translateYProperty(), tile.getTileSize() * move);
+                KeyValue kv = new KeyValue(x ? tile.translateXProperty() : tile.translateYProperty(), Main.TILESIZE * move);
                 KeyFrame kf;
                 if (tile.getCover() != null) {
-                    kf = new KeyFrame(Duration.millis(Math.abs(MOVETIME * move)), new EventHandler<ActionEvent>() {
+                    kf = new KeyFrame(Duration.millis(Math.abs(Main.MOVETIME * move)), new EventHandler<ActionEvent>() {
                         @Override
                         public void handle(ActionEvent actionEvent) {
                             tile.setNumber(tile.getNumber() * 2);
-                            field.setScore(field.getScore() + tile.getNumber());
-                            field.removeTile(tile.getCover());
+                            gamePane.getParentPane().setScore(gamePane.getParentPane().getScore() + tile.getNumber());
+                            gamePane.removeTile(tile.getCover());
                             tile.setCover(null);
                         }
                     }, kv);
                 } else {
-                    kf = new KeyFrame(Duration.millis(Math.abs(MOVETIME * move)), kv);
+                    kf = new KeyFrame(Duration.millis(Math.abs(Main.MOVETIME * move)), kv);
                 }
                 timeline.getKeyFrames().add(kf);
             }
@@ -212,7 +211,7 @@ public class Movement {
             timeline.setOnFinished(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent) {
-                    field.addTile();
+                    gamePane.addTile();
                 }
             });
             timeline.setCycleCount(1);

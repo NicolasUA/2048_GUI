@@ -10,8 +10,8 @@ public class Tile extends Button{
     private Tile cover;
     private int tileSize;
 
-    public Tile(int x, int y, int number, int tileSize) {
-        this.tileSize = tileSize;
+    public Tile(int x, int y, int number) {
+        this.tileSize = Main.TILESIZE;
         setX(x);
         setY(y);
         setPrefSize(tileSize - 1, tileSize - 1);
@@ -109,10 +109,6 @@ public class Tile extends Button{
         setLayoutY(getLayoutY() + translateYProperty().getValue());
         translateYProperty().setValue(0);
         this.dy = 0;
-    }
-
-    public int getTileSize() {
-        return tileSize;
     }
 }
 

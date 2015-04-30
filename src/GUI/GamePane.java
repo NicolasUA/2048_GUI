@@ -1,7 +1,6 @@
 package GUI;
 
 import javafx.event.EventHandler;
-import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
@@ -9,27 +8,30 @@ import javafx.scene.layout.Pane;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Field extends Pane{
+public class GamePane extends Pane{
     private List<Tile> tiles = new LinkedList<>();
     private int size;
-    private int tileSize;
-    private Label score;
+    private BasePane parentPane;
 
-    public Field(int size, int tileSize, Label score) {
+    public GamePane(int size, BasePane parentPane) {
         this.size = size;
-        this.tileSize = tileSize;
-        this.score = score;
-        setPrefSize(size * tileSize, size * tileSize);
+        this.parentPane = parentPane;
+
+        setPrefSize(size * Main.TILESIZE, size * Main.TILESIZE);
+        setLayoutX(175 - (size * Main.TILESIZE) / 2);
+        setLayoutY(175 - (size * Main.TILESIZE) / 2);
+
         setStyle("-fx-background-color: #FFFFFF;");
+        addTile();
 
         setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
                 if (Movement.isFinished()) {
-                    if (keyEvent.getCode() == KeyCode.RIGHT) Movement.moveRight(Field.this);
-                    if (keyEvent.getCode() == KeyCode.LEFT) Movement.moveLeft(Field.this);
-                    if (keyEvent.getCode() == KeyCode.DOWN) Movement.moveDown(Field.this);
-                    if (keyEvent.getCode() == KeyCode.UP) Movement.moveUp(Field.this);
+                    if (keyEvent.getCode() == KeyCode.RIGHT) Movement.moveRight(GamePane.this);
+                    if (keyEvent.getCode() == KeyCode.LEFT) Movement.moveLeft(GamePane.this);
+                    if (keyEvent.getCode() == KeyCode.DOWN) Movement.moveDown(GamePane.this);
+                    if (keyEvent.getCode() == KeyCode.UP) Movement.moveUp(GamePane.this);
                 }
             }
         });
@@ -68,11 +70,14 @@ public class Field extends Pane{
                 }
             }
             if (check) {
-                Tile newTile = new Tile(x, y, number, tileSize);
+                Tile newTile = new Tile(x, y, number);
                 this.getChildren().add(newTile);
                 tiles.add(newTile);
                 break;
             }
+        }
+        if (!canMove()) {
+            new GameOverPane(parentPane).activate();
         }
     }
 
@@ -81,8 +86,17 @@ public class Field extends Pane{
         tiles.remove(tile);
     }
 
-    private boolean checkField(Pane field) {
+    private boolean canMove() {
+        //if (tiles.size() > 5) return false;
+        if (tiles.size() < size * size) return true;
         boolean check = false;
+        for (Tile tile : tiles) {
+            for (Tile nextTile : tiles) {
+                if (Math.abs(tile.getX() - nextTile.getX() + tile.getY() - nextTile.getY()) == 1) {
+                    check = true;
+                }
+            }
+        }
         return check;
     }
 
@@ -94,11 +108,7 @@ public class Field extends Pane{
         return size;
     }
 
-    public int getScore() {
-        return Integer.parseInt(score.getText());
-    }
-
-    public void setScore(int score) {
-        this.score.setText("" + score);
+    public BasePane getParentPane() {
+        return parentPane;
     }
 }
