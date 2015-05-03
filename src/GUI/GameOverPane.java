@@ -32,6 +32,10 @@ public class GameOverPane extends Pane {
             @Override
             public void handle(ActionEvent actionEvent) {
                 parentPane.restorePane(lastPane);
+                if (parentPane.getScore() > parentPane.getBestScore()) {
+                    parentPane.setBestScore(parentPane.getScore());
+                    new HighScore(parentPane, lastPane).activate();
+                }
             }
         });
 

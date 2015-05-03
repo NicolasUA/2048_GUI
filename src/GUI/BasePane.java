@@ -12,20 +12,25 @@ import java.util.Iterator;
 public class BasePane extends Pane {
     private Label bestScore;
     private Label score;
+    private int fieldSize;
     private Button newGameButton;
     private Button saveLoadButton;
     private Button statisticButton;
+    private GameData gameData;
 
     public BasePane() {
         setPrefSize(550, 350);
         setStyle("-fx-background-color: #C0C0C0;");
+
+        gameData = new GameData();
+        fieldSize = 4;
 
         Label bestScoreTitle = new Label("Best score:");
         bestScoreTitle.setLayoutX(400);
         bestScoreTitle.setLayoutY(25);
         getChildren().add(bestScoreTitle);
 
-        bestScore = new Label("0");
+        bestScore = new Label("" + gameData.getBest(fieldSize));
         bestScore.setLayoutX(480);
         bestScore.setLayoutY(25);
         getChildren().add(bestScore);
@@ -71,12 +76,12 @@ public class BasePane extends Pane {
         statisticButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-
+                new StatisticPane(BasePane.this).activate();
             }
         });
         getChildren().add(statisticButton);
 
-        getChildren().add(new GamePane(4, this));
+        getChildren().add(new GamePane(fieldSize, this));
     }
 
     public Pane clearPane() {
@@ -105,6 +110,18 @@ public class BasePane extends Pane {
         if (pane != null) {
             this.getChildren().add(pane);
         }
+        if (pane instanceof GamePane) {
+            fieldSize = ((GamePane) pane).getSize();
+            setBestScore(gameData.getBest(fieldSize));
+        }
+    }
+
+    public int getFieldSize() {
+        return fieldSize;
+    }
+
+    public void setFieldSize(int fieldSize) {
+        this.fieldSize = fieldSize;
     }
 
     public int getScore() {
@@ -123,4 +140,7 @@ public class BasePane extends Pane {
         this.bestScore.setText("" + bestScore);
     }
 
+    public GameData getGameData() {
+        return gameData;
+    }
 }

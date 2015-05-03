@@ -77,11 +77,13 @@ public class SelectSizePane extends Pane {
 
     private void newGamePane(int size) {
         GamePane gamePane = new GamePane(size, parentPane);
-
-        // TODO - Check highScore
-
+        if (parentPane.getScore() > parentPane.getBestScore()) {
+            parentPane.setBestScore(parentPane.getScore());
+            new HighScore(parentPane, gamePane).activate();
+        } else {
+            parentPane.restorePane(gamePane);
+        }
         parentPane.setScore(0);
-        parentPane.restorePane(gamePane);
     }
 
     public void activate() {
