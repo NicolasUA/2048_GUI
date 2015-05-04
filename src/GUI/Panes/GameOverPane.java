@@ -1,4 +1,4 @@
-package GUI;
+package GUI.Panes;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -34,7 +34,7 @@ public class GameOverPane extends Pane {
                 parentPane.restorePane(lastPane);
                 if (parentPane.getScore() > parentPane.getBestScore()) {
                     parentPane.setBestScore(parentPane.getScore());
-                    new HighScore(parentPane, lastPane).activate();
+                    new HighScorePane(parentPane, lastPane).activate();
                 }
             }
         });

@@ -1,17 +1,11 @@
-package GUI;
+package GUI.Actions;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.util.Duration;
+import GUI.Panes.GamePane;
+import GUI.Additional.Tile;
 
 import java.util.*;
 
 public class Movement {
-    private static Timeline timeline = new Timeline();
-
     public static void moveRight(GamePane gamePane) {
         List<Tile> tiles = gamePane.getTiles();
         int size = gamePane.getSize();
@@ -37,7 +31,6 @@ public class Movement {
                 if (tile.getY() != previuosTile.getY()) {
                     if (tile.getX() != size) {
                         tile.setDx(size - tile.getX());
-
                     }
                     place = size - 1;
                 } else {
@@ -52,7 +45,7 @@ public class Movement {
                 }
             }
         }
-        animate(gamePane, true);
+        Animation.animateMovement(gamePane, true);
     }
 
     public static void moveLeft(GamePane gamePane) {
@@ -79,7 +72,6 @@ public class Movement {
                 if (tile.getY() != previuosTile.getY()) {
                     if (tile.getX() != 1) {
                         tile.setDx(1 - tile.getX());
-
                     }
                     place = 2;
                 } else {
@@ -94,7 +86,7 @@ public class Movement {
                 }
             }
         }
-        animate(gamePane, true);
+        Animation.animateMovement(gamePane, true);
     }
 
     public static void moveDown(GamePane gamePane) {
@@ -122,7 +114,6 @@ public class Movement {
                 if (tile.getX() != previuosTile.getX()) {
                     if (tile.getY() != size) {
                         tile.setDy(size - tile.getY());
-
                     }
                     place = size - 1;
                 } else {
@@ -137,7 +128,7 @@ public class Movement {
                 }
             }
         }
-        animate(gamePane, false);
+        Animation.animateMovement(gamePane, false);
     }
 
     public static void moveUp(GamePane gamePane) {
@@ -164,7 +155,6 @@ public class Movement {
                 if (tile.getX() != previuosTile.getX()) {
                     if (tile.getY() != 1) {
                         tile.setDy(1 - tile.getY());
-
                     }
                     place = 2;
                 } else {
@@ -179,47 +169,6 @@ public class Movement {
                 }
             }
         }
-        animate(gamePane, false);
-    }
-
-    private static void animate(final GamePane gamePane, boolean x) {
-        timeline.getKeyFrames().clear();
-        boolean hasMoves = false;
-        for (final Tile tile : gamePane.getTiles()) {
-            int move = x ? tile.getDx() : tile.getDy();
-            if (move != 0) {
-                hasMoves = true;
-                KeyValue kv = new KeyValue(x ? tile.translateXProperty() : tile.translateYProperty(), Main.TILESIZE * move);
-                KeyFrame kf;
-                if (tile.getCover() != null) {
-                    kf = new KeyFrame(Duration.millis(Math.abs(Main.MOVETIME * move)), new EventHandler<ActionEvent>() {
-                        @Override
-                        public void handle(ActionEvent actionEvent) {
-                            tile.setNumber(tile.getNumber() * 2);
-                            gamePane.getParentPane().setScore(gamePane.getParentPane().getScore() + tile.getNumber());
-                            gamePane.removeTile(tile.getCover());
-                            tile.setCover(null);
-                        }
-                    }, kv);
-                } else {
-                    kf = new KeyFrame(Duration.millis(Math.abs(Main.MOVETIME * move)), kv);
-                }
-                timeline.getKeyFrames().add(kf);
-            }
-        }
-        if (hasMoves) {
-            timeline.setOnFinished(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent) {
-                    gamePane.addTile();
-                }
-            });
-            timeline.setCycleCount(1);
-            timeline.playFromStart();
-        }
-    }
-
-    public static boolean isFinished() {
-        return timeline.getCurrentTime().toMillis() == timeline.getTotalDuration().toMillis();
+        Animation.animateMovement(gamePane, false);
     }
 }

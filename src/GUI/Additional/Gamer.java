@@ -1,4 +1,4 @@
-package GUI;
+package GUI.Additional;
 
 public class Gamer {
     String name;

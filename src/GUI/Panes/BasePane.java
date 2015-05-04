@@ -1,5 +1,6 @@
-package GUI;
+package GUI.Panes;
 
+import GUI.Additional.GameData;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;

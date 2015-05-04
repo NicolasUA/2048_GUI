@@ -1,5 +1,8 @@
-package GUI;
+package GUI.Additional;
 
+import GUI.Actions.Animation;
+import GUI.Main;
+import GUI.Panes.GamePane;
 import javafx.scene.control.Button;
 import javafx.scene.paint.Paint;
 
@@ -9,13 +12,15 @@ public class Tile extends Button{
     private int dy;
     private Tile cover;
     private int tileSize;
+    private GamePane gamePane;
 
-    public Tile(int x, int y, int number) {
+    public Tile(int x, int y, int number, GamePane gamePane) {
         this.tileSize = Main.TILESIZE;
-        setX(x);
-        setY(y);
-        setPrefSize(tileSize - 1, tileSize - 1);
-        setNumber(number);
+        this.gamePane = gamePane;
+        setLayoutX((x - 1) * tileSize + tileSize * 0.5 - 10);
+        setLayoutY((y - 1) * tileSize + tileSize * 0.5 - 10);
+        setPrefSize(20, 20);
+        Animation.animateAddTile(this, number, gamePane);
     }
 
     public void setNumber(int number) {

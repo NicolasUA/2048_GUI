@@ -1,4 +1,4 @@
-package GUI;
+package GUI.Additional;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

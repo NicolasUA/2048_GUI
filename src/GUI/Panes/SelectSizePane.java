@@ -1,4 +1,4 @@
-package GUI;
+package GUI.Panes;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -79,7 +79,7 @@ public class SelectSizePane extends Pane {
         GamePane gamePane = new GamePane(size, parentPane);
         if (parentPane.getScore() > parentPane.getBestScore()) {
             parentPane.setBestScore(parentPane.getScore());
-            new HighScore(parentPane, gamePane).activate();
+            new HighScorePane(parentPane, gamePane).activate();
         } else {
             parentPane.restorePane(gamePane);
         }

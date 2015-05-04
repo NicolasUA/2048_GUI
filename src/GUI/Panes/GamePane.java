@@ -1,5 +1,9 @@
-package GUI;
+package GUI.Panes;
 
+import GUI.Actions.Animation;
+import GUI.Main;
+import GUI.Actions.Movement;
+import GUI.Additional.Tile;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -27,7 +31,7 @@ public class GamePane extends Pane{
         setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
-                if (Movement.isFinished()) {
+                if (Animation.isFinished()) {
                     if (keyEvent.getCode() == KeyCode.RIGHT) Movement.moveRight(GamePane.this);
                     if (keyEvent.getCode() == KeyCode.LEFT) Movement.moveLeft(GamePane.this);
                     if (keyEvent.getCode() == KeyCode.DOWN) Movement.moveDown(GamePane.this);
@@ -70,14 +74,11 @@ public class GamePane extends Pane{
                 }
             }
             if (check) {
-                Tile newTile = new Tile(x, y, number);
+                Tile newTile = new Tile(x, y, number, this);
                 this.getChildren().add(newTile);
                 tiles.add(newTile);
                 break;
             }
-        }
-        if (!canMove()) {
-            new GameOverPane(parentPane).activate();
         }
     }
 
@@ -86,7 +87,7 @@ public class GamePane extends Pane{
         tiles.remove(tile);
     }
 
-    private boolean canMove() {
+    public boolean canMove() {
         if (tiles.size() > 5) return false;
         if (tiles.size() < size * size) return true;
         boolean check = false;
