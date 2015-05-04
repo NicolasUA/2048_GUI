@@ -43,14 +43,16 @@ public class HighScorePane extends Pane {
         cancel.setLayoutY(200);
         getChildren().add(cancel);
 
-        cancel.setOnAction(new EventHandler<ActionEvent>() {
+        EventHandler<ActionEvent> okAction = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 parentPane.getGameData().setBest(parentPane.getFieldSize(), parentPane.getBestScore());
                 parentPane.getGameData().addGamer(name.getText(), parentPane.getFieldSize(), parentPane.getBestScore());
                 parentPane.restorePane(lastPane);
             }
-        });
+        };
+        name.setOnAction(okAction);
+        cancel.setOnAction(okAction);
     }
 
     public void activate() {

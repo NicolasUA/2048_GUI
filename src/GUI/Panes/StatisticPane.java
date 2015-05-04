@@ -26,7 +26,7 @@ public class StatisticPane extends Pane {
         getChildren().add(text);
 
         TableView<Gamer> statistic = new TableView<>();
-        statistic.setPrefSize(252, 180);
+        statistic.setPrefSize(265, 180);
         statistic.setLayoutX(25);
         statistic.setLayoutY(50);
 
