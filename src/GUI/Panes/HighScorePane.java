@@ -9,55 +9,57 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 
 public class HighScorePane extends Pane {
-    private BasePane parentPane;
+    private BasePane basePane;
     private Pane lastPane;
 
-    public HighScorePane(final BasePane parentPane, final Pane lastPane) {
-        this.parentPane = parentPane;
+    public HighScorePane(final BasePane basePane, final Pane lastPane) {
+        this.basePane = basePane;
         this.lastPane = lastPane;
 
         setPrefSize(300, 300);
         setLayoutX(25);
         setLayoutY(25);
 
-        Label text = new Label("New High Score!");
-        text.setLayoutX(110);
-        text.setLayoutY(25);
-        getChildren().add(text);
+        Label newHighScore = new Label("New High Score!");
+        newHighScore.setLayoutX(100);
+        newHighScore.setLayoutY(25);
+        newHighScore.setPrefWidth(100);
+        newHighScore.setAlignment(Pos.CENTER);
+        getChildren().add(newHighScore);
 
-        Label text1 = new Label("Enter your name:");
-        text1.setLayoutX(110);
-        text1.setLayoutY(50);
-        getChildren().add(text1);
+        Label enterName = new Label("Enter your name:");
+        enterName.setLayoutX(100);
+        enterName.setLayoutY(50);
+        enterName.setPrefWidth(100);
+        enterName.setAlignment(Pos.CENTER);
+        getChildren().add(enterName);
 
         final TextField name = new TextField("<Anonymous>");
         name.setPrefSize(200, 30);
-        name.setLayoutX(60);
+        name.setLayoutX(50);
         name.setLayoutY(100);
         name.setAlignment(Pos.CENTER);
         getChildren().add(name);
 
-        Button cancel = new Button("OK");
-        cancel.setPrefSize(75, 30);
-        cancel.setLayoutX(125);
-        cancel.setLayoutY(200);
-        getChildren().add(cancel);
+        Button okButton = new Button("OK");
+        okButton.setPrefSize(75, 30);
+        okButton.setLayoutX(115);
+        okButton.setLayoutY(200);
+        getChildren().add(okButton);
 
         EventHandler<ActionEvent> okAction = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                parentPane.getGameData().setBest(parentPane.getFieldSize(), parentPane.getBestScore());
-                parentPane.getGameData().addGamer(name.getText(), parentPane.getFieldSize(), parentPane.getBestScore());
-                parentPane.restorePane(lastPane);
+                basePane.getGameData().addGamer(name.getText(), basePane.getFieldSize(), basePane.getBestScore());
+                basePane.restorePane(lastPane);
             }
         };
         name.setOnAction(okAction);
-        cancel.setOnAction(okAction);
+        okButton.setOnAction(okAction);
     }
 
     public void activate() {
-        parentPane.clearPane();
-        parentPane.getChildren().add(this);
+        basePane.clearPane();
+        basePane.getChildren().add(this);
     }
-
 }

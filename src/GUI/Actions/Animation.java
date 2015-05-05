@@ -1,6 +1,5 @@
 package GUI.Actions;
 
-import GUI.Main;
 import GUI.Panes.GameOverPane;
 import GUI.Panes.GamePane;
 import GUI.Additional.Tile;
@@ -21,20 +20,21 @@ public class Animation {
             int move = x ? tile.getDx() : tile.getDy();
             if (move != 0) {
                 hasMoves = true;
-                KeyValue kv = new KeyValue(x ? tile.translateXProperty() : tile.translateYProperty(), Main.TILESIZE * move);
+                KeyValue kv = new KeyValue(x ? tile.translateXProperty() : tile.translateYProperty(),
+                        tile.getTileSize() * move);
                 KeyFrame kf;
                 if (tile.getCover() != null) {
-                    kf = new KeyFrame(Duration.millis(Math.abs(Main.MOVETIME * move)), new EventHandler<ActionEvent>() {
+                    kf = new KeyFrame(Duration.millis(Math.abs(gamePane.getMoveTime() * move)), new EventHandler<ActionEvent>() {
                         @Override
                         public void handle(ActionEvent actionEvent) {
                             tile.setNumber(tile.getNumber() * 2);
-                            gamePane.getParentPane().setScore(gamePane.getParentPane().getScore() + tile.getNumber());
+                            gamePane.setScore(gamePane.getScore() + tile.getNumber());
                             gamePane.removeTile(tile.getCover());
                             tile.setCover(null);
                         }
                     }, kv);
                 } else {
-                    kf = new KeyFrame(Duration.millis(Math.abs(Main.MOVETIME * move)), kv);
+                    kf = new KeyFrame(Duration.millis(Math.abs(gamePane.getMoveTime() * move)), kv);
                 }
                 timeline.getKeyFrames().add(kf);
             }
@@ -50,20 +50,27 @@ public class Animation {
         playAnimation();
     }
 
-    public static void animateAddTile(final Tile tile, final int number, final GamePane gamePane) {
-        clearFrames();
-        KeyValue kv1 = new KeyValue(tile.translateXProperty(), - Main.TILESIZE / 2 + 10);
-        KeyValue kv2 = new KeyValue(tile.translateYProperty(), - Main.TILESIZE / 2 + 10);
-        KeyValue kv3 = new KeyValue(tile.prefHeightProperty(), Main.TILESIZE - 1);
-        KeyValue kv4 = new KeyValue(tile.prefWidthProperty(), Main.TILESIZE - 1);
-        KeyFrame kf = new KeyFrame(Duration.millis(Main.MOVETIME), kv1, kv2, kv3, kv4);
-        timeline.setOnFinished(new EventHandler<ActionEvent>() {
+    public static void animateAddTile(final Tile tile, final int number) {
+        if (isFinished()) {
+            clearFrames();
+        } else {
+            timeline.pause();
+        }
+        KeyValue kv1 = new KeyValue(tile.translateXProperty(), - tile.getTileSize() / 2 + 10);
+        KeyValue kv2 = new KeyValue(tile.translateYProperty(), - tile.getTileSize() / 2 + 10);
+        KeyValue kv3 = new KeyValue(tile.prefHeightProperty(), tile.getTileSize() - 1);
+        KeyValue kv4 = new KeyValue(tile.prefWidthProperty(), tile.getTileSize() - 1);
+        KeyFrame kf = new KeyFrame(Duration.millis(tile.getGamePane().getMoveTime()), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 tile.setNumber(number);
-                tile.normalizeCoordinates();
-                if (!gamePane.canMove()) {
-                    new GameOverPane(gamePane.getParentPane()).activate();
+            }
+        }, kv1, kv2, kv3, kv4);
+        timeline.setOnFinished(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                if (!tile.getGamePane().canMove()) {
+                    new GameOverPane(tile.getGamePane().getBasePane()).activate();
                 }
             }
         });

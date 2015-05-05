@@ -10,33 +10,35 @@ import javafx.scene.layout.Pane;
 import javafx.util.Callback;
 
 public class StatisticPane extends Pane {
-    private BasePane parentPane;
+    private BasePane basePane;
     private Pane lastPane;
 
-    public StatisticPane(final BasePane parentPane) {
-        this.parentPane = parentPane;
+    public StatisticPane(final BasePane basePane) {
+        this.basePane = basePane;
 
         setPrefSize(300, 300);
         setLayoutX(25);
         setLayoutY(25);
 
-        Label text = new Label("Statistic");
-        text.setLayoutX(120);
-        text.setLayoutY(25);
-        getChildren().add(text);
+        Label statisticLabel = new Label("Statistic");
+        statisticLabel.setLayoutX(100);
+        statisticLabel.setLayoutY(25);
+        statisticLabel.setPrefWidth(100);
+        statisticLabel.setAlignment(Pos.CENTER);
+        getChildren().add(statisticLabel);
 
         TableView<Gamer> statistic = new TableView<>();
-        statistic.setPrefSize(265, 180);
-        statistic.setLayoutX(25);
+        statistic.setPrefSize(265, 190);
+        statistic.setLayoutX(20);
         statistic.setLayoutY(50);
 
-        TableColumn firstColumn = new TableColumn("Name");
-        firstColumn.setPrefWidth(150);
-        firstColumn.setCellValueFactory(new PropertyValueFactory<Gamer, String>("name"));
+        TableColumn nameColumn = new TableColumn("Name");
+        nameColumn.setPrefWidth(150);
+        nameColumn.setCellValueFactory(new PropertyValueFactory<Gamer, String>("name"));
 
-        TableColumn secondColumn = new TableColumn("Size");
-        secondColumn.setPrefWidth(50);
-        secondColumn.setCellFactory(new Callback<TableColumn<Gamer, Integer>, TableCell<Gamer, Integer>>() {
+        TableColumn sizeColumn = new TableColumn("Size");
+        sizeColumn.setPrefWidth(50);
+        sizeColumn.setCellFactory(new Callback<TableColumn<Gamer, Integer>, TableCell<Gamer, Integer>>() {
             @Override
             public TableCell<Gamer, Integer> call(TableColumn<Gamer, Integer> gamerStringTableColumn) {
                 TableCell<Gamer, Integer> cell = new TableCell<Gamer, Integer>() {
@@ -49,11 +51,11 @@ public class StatisticPane extends Pane {
                 return cell;
             }
         });
-        secondColumn.setCellValueFactory(new PropertyValueFactory<Gamer, Integer>("size"));
+        sizeColumn.setCellValueFactory(new PropertyValueFactory<Gamer, Integer>("size"));
 
-        TableColumn thirdColumn = new TableColumn("Score");
-        thirdColumn.setPrefWidth(50);
-        thirdColumn.setCellFactory(new Callback<TableColumn<Gamer, Integer>, TableCell<Gamer, Integer>>() {
+        TableColumn scoreColumn = new TableColumn("Score");
+        scoreColumn.setPrefWidth(50);
+        scoreColumn.setCellFactory(new Callback<TableColumn<Gamer, Integer>, TableCell<Gamer, Integer>>() {
             @Override
             public TableCell<Gamer, Integer> call(TableColumn<Gamer, Integer> gamerStringTableColumn) {
                 TableCell<Gamer, Integer> cell = new TableCell<Gamer, Integer>() {
@@ -66,31 +68,31 @@ public class StatisticPane extends Pane {
                 return cell;
             }
         });
-        thirdColumn.setCellValueFactory(new PropertyValueFactory<Gamer, Integer>("score"));
-        thirdColumn.setSortType(TableColumn.SortType.DESCENDING);
+        scoreColumn.setCellValueFactory(new PropertyValueFactory<Gamer, Integer>("score"));
+        scoreColumn.setSortType(TableColumn.SortType.DESCENDING);
 
-        statistic.setItems(parentPane.getGameData().getStatistic());
-        statistic.getColumns().addAll(firstColumn, secondColumn, thirdColumn);
-        statistic.getSortOrder().add(thirdColumn);
+        statistic.setItems(basePane.getGameData().getStatistic());
+        statistic.getColumns().addAll(nameColumn, sizeColumn, scoreColumn);
+        statistic.getSortOrder().add(scoreColumn);
 
         getChildren().add(statistic);
 
-        Button cancel = new Button("OK");
-        cancel.setPrefSize(75, 30);
-        cancel.setLayoutX(125);
-        cancel.setLayoutY(250);
-        getChildren().add(cancel);
+        Button okButton = new Button("OK");
+        okButton.setPrefSize(75, 30);
+        okButton.setLayoutX(115);
+        okButton.setLayoutY(250);
+        getChildren().add(okButton);
 
-        cancel.setOnAction(new EventHandler<ActionEvent>() {
+        okButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                parentPane.restorePane(lastPane);
+                basePane.restorePane(lastPane);
             }
         });
     }
 
     public void activate() {
-        lastPane = parentPane.clearPane();
-        parentPane.getChildren().add(this);
+        lastPane = basePane.clearPane();
+        basePane.getChildren().add(this);
     }
 }

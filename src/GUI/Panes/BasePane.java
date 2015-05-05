@@ -3,6 +3,7 @@ package GUI.Panes;
 import GUI.Additional.GameData;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -24,27 +25,32 @@ public class BasePane extends Pane {
         setStyle("-fx-background-color: #C0C0C0;");
 
         gameData = new GameData();
+        gameData.load();
         fieldSize = 4;
 
-        Label bestScoreTitle = new Label("Best score:");
-        bestScoreTitle.setLayoutX(400);
-        bestScoreTitle.setLayoutY(25);
-        getChildren().add(bestScoreTitle);
-
-        bestScore = new Label("" + gameData.getBest(fieldSize));
-        bestScore.setLayoutX(480);
-        bestScore.setLayoutY(25);
-        getChildren().add(bestScore);
-
         Label scoreTitle = new Label("Current score:");
-        scoreTitle.setLayoutX(400);
-        scoreTitle.setLayoutY(45);
+        scoreTitle.setLayoutX(375);
+        scoreTitle.setLayoutY(25);
+        scoreTitle.setPrefWidth(100);
+        scoreTitle.setAlignment(Pos.CENTER_RIGHT);
         getChildren().add(scoreTitle);
 
         score = new Label("0");
         score.setLayoutX(480);
-        score.setLayoutY(45);
+        score.setLayoutY(25);
         getChildren().add(score);
+
+        Label bestScoreTitle = new Label("Best score:");
+        bestScoreTitle.setLayoutX(375);
+        bestScoreTitle.setLayoutY(45);
+        bestScoreTitle.setPrefWidth(100);
+        bestScoreTitle.setAlignment(Pos.CENTER_RIGHT);
+        getChildren().add(bestScoreTitle);
+
+        bestScore = new Label("" + gameData.getBest(fieldSize));
+        bestScore.setLayoutX(480);
+        bestScore.setLayoutY(45);
+        getChildren().add(bestScore);
 
         newGameButton = new Button("New Game");
         newGameButton.setPrefSize(100, 30);
@@ -65,7 +71,7 @@ public class BasePane extends Pane {
         saveLoadButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-
+                new SaveLoadPane(BasePane.this).activate();
             }
         });
         getChildren().add(saveLoadButton);

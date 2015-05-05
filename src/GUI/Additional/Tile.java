@@ -15,12 +15,12 @@ public class Tile extends Button{
     private GamePane gamePane;
 
     public Tile(int x, int y, int number, GamePane gamePane) {
-        this.tileSize = Main.TILESIZE;
+        this.tileSize = gamePane.getTileSize();
         this.gamePane = gamePane;
         setLayoutX((x - 1) * tileSize + tileSize * 0.5 - 10);
         setLayoutY((y - 1) * tileSize + tileSize * 0.5 - 10);
         setPrefSize(20, 20);
-        Animation.animateAddTile(this, number, gamePane);
+        Animation.animateAddTile(this, number);
     }
 
     public void setNumber(int number) {
@@ -84,6 +84,11 @@ public class Tile extends Button{
     }
 
     public int getX() {
+        if (translateXProperty().getValue() != 0) {
+            setLayoutX(getLayoutX() + translateXProperty().getValue());
+            translateXProperty().setValue(0);
+            this.dx = 0;
+        }
         return (int) (getLayoutX() / tileSize + 1);
     }
 
@@ -92,6 +97,11 @@ public class Tile extends Button{
     }
 
     public int getY() {
+        if (translateYProperty().getValue() != 0) {
+            setLayoutY(getLayoutY() + translateYProperty().getValue());
+            translateYProperty().setValue(0);
+            this.dy = 0;
+        }
         return (int) (getLayoutY() / tileSize + 1);
     }
 
@@ -105,6 +115,14 @@ public class Tile extends Button{
 
     public void setCover(Tile cover) {
         this.cover = cover;
+    }
+
+    public GamePane getGamePane() {
+        return gamePane;
+    }
+
+    public int getTileSize() {
+        return tileSize;
     }
 
     public void normalizeCoordinates() {

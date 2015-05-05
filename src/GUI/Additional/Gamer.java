@@ -1,6 +1,8 @@
 package GUI.Additional;
 
-public class Gamer {
+import java.io.Serializable;
+
+public class Gamer implements Serializable {
     String name;
     int size;
     int score;

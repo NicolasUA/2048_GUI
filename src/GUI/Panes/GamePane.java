@@ -1,7 +1,6 @@
 package GUI.Panes;
 
 import GUI.Actions.Animation;
-import GUI.Main;
 import GUI.Actions.Movement;
 import GUI.Additional.Tile;
 import javafx.event.EventHandler;
@@ -13,17 +12,24 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class GamePane extends Pane{
-    private List<Tile> tiles = new LinkedList<>();
+    private BasePane basePane;
     private int size;
-    private BasePane parentPane;
+    private int score;
+    private List<Tile> tiles = new LinkedList<>();
+    private int tileSize;
+    private int[] tileSizes = new int[] {0, 0, 0, 0, 50, 50, 50, 42, 36};
+    private int moveTime;
 
-    public GamePane(int size, BasePane parentPane) {
+    public GamePane(int size, BasePane basePane) {
         this.size = size;
-        this.parentPane = parentPane;
+        this.basePane = basePane;
+        setScore(0);
+        this.tileSize = tileSizes[size];
+        this.moveTime = 400 * 4 / size;
 
-        setPrefSize(size * Main.TILESIZE, size * Main.TILESIZE);
-        setLayoutX(175 - (size * Main.TILESIZE) / 2);
-        setLayoutY(175 - (size * Main.TILESIZE) / 2);
+        setPrefSize(size * tileSize, size * tileSize);
+        setLayoutX(175 - (size * tileSize) / 2);
+        setLayoutY(175 - (size * tileSize) / 2);
 
         setStyle("-fx-background-color: #FFFFFF;");
         addTile();
@@ -61,9 +67,6 @@ public class GamePane extends Pane{
 
     public void addTile() {
         int number = Math.random() < 0.9 ? 2 : 4;
-        for (Tile tile : tiles) {
-            tile.normalizeCoordinates();
-        }
         while (true) {
             int x = (int) (Math.random() * size + 1);
             int y = (int) (Math.random() * size + 1);
@@ -88,7 +91,7 @@ public class GamePane extends Pane{
     }
 
     public boolean canMove() {
-        if (tiles.size() > 5) return false;
+        //if (tiles.size() > 5) return false;
         if (tiles.size() < size * size) return true;
         boolean check = false;
         for (Tile tile : tiles) {
@@ -102,15 +105,32 @@ public class GamePane extends Pane{
         return check;
     }
 
-    public List<Tile> getTiles() {
-        return tiles;
+    public BasePane getBasePane() {
+        return basePane;
     }
 
     public int getSize() {
         return size;
     }
 
-    public BasePane getParentPane() {
-        return parentPane;
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+        basePane.setScore(score);
+    }
+
+    public List<Tile> getTiles() {
+        return tiles;
+    }
+
+    public int getTileSize() {
+        return tileSize;
+    }
+
+    public int getMoveTime() {
+        return moveTime;
     }
 }
