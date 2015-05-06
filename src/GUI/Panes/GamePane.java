@@ -3,10 +3,14 @@ package GUI.Panes;
 import GUI.Actions.Animation;
 import GUI.Actions.Movement;
 import GUI.Additional.Tile;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
+import javafx.util.Duration;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -19,6 +23,7 @@ public class GamePane extends Pane{
     private int tileSize;
     private int[] tileSizes = new int[] {0, 0, 0, 0, 50, 50, 50, 42, 36};
     private int moveTime;
+    private static Timeline focus;
 
     public GamePane(int size, BasePane basePane) {
         this.size = size;
@@ -42,27 +47,20 @@ public class GamePane extends Pane{
                     if (keyEvent.getCode() == KeyCode.LEFT) Movement.moveLeft(GamePane.this);
                     if (keyEvent.getCode() == KeyCode.DOWN) Movement.moveDown(GamePane.this);
                     if (keyEvent.getCode() == KeyCode.UP) Movement.moveUp(GamePane.this);
+                    keyEvent.consume();
                 }
             }
         });
 
-        Thread focusField = new Thread(new Runnable() {
+        focus = new Timeline(new KeyFrame(Duration.millis(100), new EventHandler<ActionEvent>() {
             @Override
-            public void run() {
-                while (!Thread.currentThread().isInterrupted()) {
-                    if (!isFocused()) {
-                        try {
-                            Thread.sleep(100);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        requestFocus();
-                    }
-                }
+            public void handle(ActionEvent actionEvent) {
+                if (!GamePane.this.isFocused()) GamePane.this.requestFocus();
             }
-        });
-        focusField.setDaemon(true);
-        focusField.start();
+        }));
+        focus.setCycleCount(Timeline.INDEFINITE);
+        focus.play();
+
     }
 
     public void addTile() {

@@ -88,6 +88,6 @@ public class Animation {
     }
 
     public static boolean isFinished() {
-        return timeline.getCurrentTime().toMillis() == timeline.getTotalDuration().toMillis();
+        return timeline.getStatus() == javafx.animation.Animation.Status.STOPPED;
     }
 }
