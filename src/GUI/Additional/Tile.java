@@ -12,10 +12,12 @@ public class Tile extends Button{
     private int dy;
     private Tile cover;
     private int tileSize;
+    private int textSize;
     private GamePane gamePane;
 
     public Tile(int x, int y, int number, GamePane gamePane) {
         this.tileSize = gamePane.getTileSize();
+        this.textSize = 8 + (int) Math.ceil(this.tileSize / 6.0);
         this.gamePane = gamePane;
         setLayoutX((x - 1) * tileSize + tileSize * 0.5 - 10);
         setLayoutY((y - 1) * tileSize + tileSize * 0.5 - 10);
@@ -25,41 +27,29 @@ public class Tile extends Button{
 
     public void setNumber(int number) {
         this.number = number;
-        switch (number) {
-            case 2:
-                setTextFill(Paint.valueOf("RED"));
-                break;
-            case 4:
-                setTextFill(Paint.valueOf("ORANGE"));
-                break;
-            case 8:
-                setTextFill(Paint.valueOf("YELLOW"));
-                break;
-            case 16:
-                setTextFill(Paint.valueOf("LIGHTGREEN"));
-                break;
-            case 32:
-                setTextFill(Paint.valueOf("CYAN"));
-                break;
-            case 64:
-                setTextFill(Paint.valueOf("BLUE"));
-                break;
-            case 128:
-                setTextFill(Paint.valueOf("VIOLET"));
-                break;
-            case 256:
-                setTextFill(Paint.valueOf("MAGENTA"));
-                break;
-            case 512:
-                setTextFill(Paint.valueOf("WHITE"));
-                break;
-            case 1024:
-                setTextFill(Paint.valueOf("GREY"));
-                break;
-            case 2048:
-                setTextFill(Paint.valueOf("BLACK"));
-                break;
+        String style = "-fx-padding: 1,1,1,1;";
+        String[] colors = new String[] {"",
+                "RED",
+                "ORANGE",
+                "YELLOW",
+                "LIGHTGREEN",
+                "CYAN",
+                "BLUE",
+                "VIOLET",
+                "MAGENTA",
+                "WHITE",
+                "LIGHTGRAY",
+                "GRAY"
+        };
+        int i = 31 - Integer.numberOfLeadingZeros(number);
+        if (i < 12) {
+            style += "-fx-color: " + colors[i] + ";";
+        } else {
+            style += "-fx-color: DARKGRAY;";
         }
+        int j = this.textSize - (int) Math.log10(number);
+        style += "-fx-font-size: " + j + "pt;";
+        setStyle(style);
         setText("" + number);
     }
 
@@ -123,15 +113,6 @@ public class Tile extends Button{
 
     public int getTileSize() {
         return tileSize;
-    }
-
-    public void normalizeCoordinates() {
-        setLayoutX(getLayoutX() + translateXProperty().getValue());
-        translateXProperty().setValue(0);
-        this.dx = 0;
-        setLayoutY(getLayoutY() + translateYProperty().getValue());
-        translateYProperty().setValue(0);
-        this.dy = 0;
     }
 }
 

@@ -25,7 +25,7 @@ public class GamePane extends Pane{
         this.basePane = basePane;
         setScore(0);
         this.tileSize = tileSizes[size];
-        this.moveTime = 400 * 4 / size;
+        this.moveTime = 100 * 4 / size;
 
         setPrefSize(size * tileSize, size * tileSize);
         setLayoutX(175 - (size * tileSize) / 2);

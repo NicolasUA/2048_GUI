@@ -119,7 +119,7 @@ public class SaveLoadPane extends Pane {
             @Override
             public void handle(ActionEvent actionEvent) {
                 if (lastPane instanceof GamePane)
-                    basePane.getGameData().addSaveGame((GamePane) lastPane, "Test");
+                    new SaveNamePane(basePane, lastPane).activate();
             }
         });
 
@@ -127,9 +127,6 @@ public class SaveLoadPane extends Pane {
             @Override
             public void handle(ActionEvent actionEvent) {
                 if (games.getSelectionModel().getSelectedItem() != null) {
-
-                    // TODO Make name enter pane
-
                     basePane.restorePane(basePane.getGameData().loadSaveGame(games.getSelectionModel().getSelectedItem(), basePane));
                 }
             }
