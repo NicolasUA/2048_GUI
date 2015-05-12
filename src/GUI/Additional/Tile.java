@@ -48,7 +48,7 @@ public class Tile extends Button{
             style += "-fx-color: DARKGRAY;";
         }
         int j = this.textSize - (int) Math.log10(number);
-        style += "-fx-font-size: " + j + "pt;";
+        style += "-fx-font-size: " + j + "px;";
         setStyle(style);
         setText("" + number);
     }

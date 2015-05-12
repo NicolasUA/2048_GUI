@@ -94,7 +94,7 @@ public class GamePane extends Pane{
         boolean check = false;
         for (Tile tile : tiles) {
             for (Tile nextTile : tiles) {
-                if ((Math.abs(tile.getX() - nextTile.getX() + tile.getY() - nextTile.getY()) == 1) &&
+                if (((Math.abs(tile.getX() - nextTile.getX()) + Math.abs(tile.getY() - nextTile.getY())) == 1) &&
                         (tile.getNumber() == nextTile.getNumber())) {
                     check = true;
                 }
